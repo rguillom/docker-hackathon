@@ -1,0 +1,134 @@
+<!doctype html>
+
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+
+    <title>Docker Hackathon</title>
+    <meta name="description" content="The docker hackathon form">
+    <meta name="author" content="SQLI Nantes">
+
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+        .bash {
+             background-color: black;
+             color: grey;
+             font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+             padding: 0.5em ;
+        }
+        .bash.input {
+            border : solid thin grey;
+        }
+        .bash.input:disabled {
+            border :  0 ;
+        }
+        .sqliColor1 {
+            color : #967D4D;
+        }
+        .sqliColor2 {
+            color : grey;
+        }
+        .dockerColor {
+            color : #22B8EB;
+        }
+        .titleElement {
+            color : white;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+
+    <script type="text/javascript">
+
+        /******************************************************************************/
+        /**********     Google Form API                                               */
+        /******************************************************************************/
+        function postResponseFormToGoogle(userId){
+            $.ajax({
+                url: "https://docs.google.com/forms/d/[GOOGLE_FORM_ID]/formResponse",
+                data: {"entry.150889720" : userId },
+                type: "POST",
+                dataType: "xml",
+                statusCode: {
+                    0: function (){
+                        displayUserRegistered(userId);
+                    },
+                    200: function (){
+                        displayUserRegistered(userId);
+                    }
+                }
+            });
+        }
+
+        /******************************************************************************/
+        /**********     Scripts applicatifs                                           */
+        /******************************************************************************/
+        function onClickEraseInitialText(){
+            var inputElement = $("#participant-name");
+
+            if(inputElement.val() == initialUserNameText){
+                inputElement.val("");
+            }
+        }
+
+        function onUserNameKeyEvent(event) {
+          if(event.keyCode == 13){
+                //retrieve the username or email
+                var userId = $("#participant-name").val();
+                callRegistrationAPI(userId);
+            }
+
+        }
+
+        function callRegistrationAPI(userId){
+            postResponseFormToGoogle(userId);
+            $("#div-input-name").replaceWith(userId);
+        }
+
+        function displayUserRegistered(userId){
+            var divElement = $("#console-answer");
+            divElement.append("<code>archteam@sqlinantes:/home/archteam$ "+userId+" has been registered !</code><br/>");
+            divElement.append("<code>archteam@sqlinantes:/home/archteam$ echo $?</code><br/>");
+            divElement.append("<code>0</code>");
+        }
+
+    </script>    
+</head>
+
+<body>
+  	<div id="console-answer" class="bash">
+  			<pre>
+#####################################################################
+##                                                                 ##
+##       <span class="sqliColor2">#</span>          <span class="sqliColor1">#</span>                                              ##
+##        <span class="sqliColor2">#</span>        <span class="sqliColor1">#</span>        <span class="titleElement">Hackathon                              </span>##
+##         <span class="sqliColor2">#</span>      <span class="sqliColor1">#</span>         <span class="titleElement">¨¨¨¨¨¨¨¨¨¨                             </span>##
+##          <span class="sqliColor2">#</span>    <span class="sqliColor1">#</span>          <span class="dockerColor">                  ##        .          </span>##
+##           <span class="sqliColor2">#</span>  <span class="sqliColor1">#</span>           <span class="dockerColor">            ## ## ##       ==          </span>##
+##            <span class="sqliColor2">#</span><span class="sqliColor1">#</span>    SQLI    <span class="dockerColor">         ## ## ## ##     ===           </span>##
+##           <span class="sqliColor2">#</span>  <span class="sqliColor1">#</span>   #Nantes <span class="dockerColor">     /""""""""""""""""\___/ ===        </span>##
+##          <span class="sqliColor2">#</span>    <span class="sqliColor1">#</span>          <span class="dockerColor">~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~ </span>##
+##         <span class="sqliColor2">#</span>      <span class="sqliColor1">#</span>         <span class="dockerColor">     \______ o          __/            </span>##
+##        <span class="sqliColor2">#</span>        <span class="sqliColor1">#</span>        <span class="dockerColor">      \    \        __/                </span>##
+##       <span class="sqliColor2">#</span>          <span class="sqliColor1">#</span>       <span class="dockerColor">       \____\______/                   </span>##
+##                                                                 ## 
+##      <span class="titleElement">|¨¨¨¨¨¨¨¨¨¨¨¨|</span>      <span class="dockerColor">        |          |                   </span>##
+##      <span class="titleElement">| 05/07/2016 |</span>      <span class="dockerColor">     __ |  __   __ | _  __   __        </span>##
+##      <span class="titleElement">|      ##    |</span>      <span class="dockerColor">    /  \| /  \ /   |/  / _\ |          </span>##
+##      <span class="titleElement">|    19:00   |</span>      <span class="dockerColor">    \__/| \__/ \__ |\_ \__  |          </span>##
+##      <span class="titleElement">|    22:00   |</span>                                             ##
+##      <span class="titleElement">|____________|</span>                                             ## 
+##                                                                 ##
+#####################################################################
+            </pre>	
+  			<code>
+                archteam@sqlinantes:/home/archteam$ docker run -d -p 80:8080 sqli-nantes/docker-hack "submit <span id="div-input-name"><input id="participant-name" type="text" class="bash input" value="nom ou email ici..." onkeypress="onUserNameKeyEvent(event)" onclick="onClickEraseInitialText()"/></span> to the docker hackathon !"
+            </code>
+  			<br/> 	
+  	</div>	
+  <script type="text/javascript">
+       var initialUserNameText = $("#participant-name").val();
+  </script>
+</body>
+</html>
